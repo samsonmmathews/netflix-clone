@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+app.set('view engine', 'hbs')
 const port = 5000
 
 const mongoose = require('mongoose');
