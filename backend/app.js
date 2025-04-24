@@ -15,6 +15,34 @@ db.once('open', () => {
     console.log("Connected to MongoDB");
 })
 
+const User = require('./models/user')
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+app.use(session({
+    secret: 'abcd1234',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongoUrl: 'mongodb+srv://samsonmathew:pass1@cluster0.xusshfi.mongodb.net/netflix-clone' }),
+    cookie: {
+        maxAge: 1000*60*60*24*7
+    }
+}))
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local'). Strategy;
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(cors());
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.listen(port, () => {
     console.log(`API is running on port ${port}`)
 })
