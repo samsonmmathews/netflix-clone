@@ -15,7 +15,7 @@ db.once('open', () => {
     console.log("Connected to MongoDB");
 })
 
-const User = require('./models/user')
+const User = require('./models/User')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 app.use(session({
@@ -42,6 +42,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const authRoutes = require('./routes/authRoutes');
+
+app.use('/', authRoutes)
 
 app.listen(port, () => {
     console.log(`API is running on port ${port}`)
