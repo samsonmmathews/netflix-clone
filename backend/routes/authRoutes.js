@@ -36,4 +36,22 @@ router.post('/login', (req, res, next) => {
     })(req, res, next)
 })
 
+router.get('/check-auth', (req, res) => {
+    console.log("User auth", req. isAuthenticated)
+    if(req.isAuthenticated()) {
+        res.json({ authenticated: true, user: req.user });
+    } else {
+        res.json({ authenticated: false, user: null });
+    }
+})
+
+router.get('/logout', (req, res) => {
+    req.logout(err => {
+        if (err) {
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        res.json({success: true});
+    })
+})
+
 module.exports = router;
