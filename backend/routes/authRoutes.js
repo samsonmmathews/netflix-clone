@@ -70,13 +70,42 @@ router.post('/admin/register', (req,res) => {
         const isAdmin = true;
         const user = User.register(new User({ username: req.body.username, isAdmin }), req.body.password);
         passport.authenticate('local')(req, res, () => {
-            res.json({ success: true, user });
-            // res.redirect('/admin/login');
+            // res.json({ success: true, user });
+            res.redirect('/admin/login');
         })
         
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+})
+
+router.get('/admin/login', (req, res) => {
+    res.render('adminLogin')
+})
+
+router.post('/admin/login', (req,res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if(err) {
+            return res.status(500).json({ success: false, error: err.message });
+        }
+
+        if(!user) {
+            return res.render('adminLogin', {errorMessage: 'Authentication failed' });
+        }
+
+        if(!user.isAdmin) {
+            return res.render('adminLogin', { errorMessage: 'You are not an admin' });
+        }
+
+        req.login(user, (loginErr) => {
+            if(loginErr) {
+                return res.status(500).json({ success: false, error: loginErr.message });
+            }
+
+            console.log("Login successful")
+            // res.redirect('/')
+        })
+    })(req, res, next);
 })
 
 module.exports = router;
