@@ -36,7 +36,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(cors());
+app.use(cors({
+    credentials: true
+}));
 
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,8 +47,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
+const dashboard = require('./routes/dashboard')
 
 app.use('/', authRoutes)
+app.use('/', dashboard)
 
 app.listen(port, () => {
     console.log(`API is running on port ${port}`)

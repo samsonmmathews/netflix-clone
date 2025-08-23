@@ -102,10 +102,18 @@ router.post('/admin/login', (req,res, next) => {
                 return res.status(500).json({ success: false, error: loginErr.message });
             }
 
-            console.log("Login successful")
-            // res.redirect('/')
+            res.redirect('/')
         })
     })(req, res, next);
+})
+
+router.get('/admin/logout', (req, res) => {
+    req.logout(err => {
+        if(err) {
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        res.redirect('/admin/login')
+    })
 })
 
 module.exports = router;
