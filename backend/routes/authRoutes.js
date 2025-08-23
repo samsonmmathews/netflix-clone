@@ -58,4 +58,25 @@ router.get('/admin/register', (req, res) => {
     res.render('adminRegister')
 })
 
+router.post('/admin/register', (req,res) => {
+    try {
+
+        const secretCode = req.body.secretCode;
+        if (secretCode !== 'abcd1234')
+        {
+            return res.render('adminRegister', { errorMessage: 'Invalid secret code' });
+        }
+
+        const isAdmin = true;
+        const user = User.register(new User({ username: req.body.username, isAdmin }), req.body.password);
+        passport.authenticate('local')(req, res, () => {
+            res.json({ success: true, user });
+            // res.redirect('/admin/login');
+        })
+        
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+})
+
 module.exports = router;
