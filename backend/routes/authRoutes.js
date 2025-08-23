@@ -54,4 +54,8 @@ router.get('/logout', (req, res) => {
     })
 })
 
+router.get('/admin/register', (req, res) => {
+    res.render('adminRegister')
+})
+
 module.exports = router;
