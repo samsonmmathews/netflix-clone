@@ -19,12 +19,11 @@ router.post('/fetch-movie', async (req, res) => {
         const responseData = await fetch(url, options)
         const result = await responseData.json()
 
-        if(result.results.length ===0)
-        {
+        if (result.results.length === 0) {
             return res.status(404).json({ error: 'No movies found with the given search term' })
         }
 
-        res.render('addMovieList', {movieList: result.results})
+        res.render('addMovieList', { movieList: result.results })
 
         // res.json(result)
 
