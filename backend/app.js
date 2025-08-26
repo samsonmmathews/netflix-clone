@@ -48,9 +48,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
 const dashboard = require('./routes/dashboard')
+const addMovie = require('./routes/addMovie')
 
 app.use('/', authRoutes)
 app.use('/', dashboard)
+app.use('/', addMovie)
 
 app.listen(port, () => {
     console.log(`API is running on port ${port}`)
