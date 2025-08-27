@@ -35,7 +35,25 @@ router.post('/fetch-movie', async (req, res) => {
 
 router.get('/addMovie/:movieId', async (req, res) => {
     const movieId = req.params.movieId;
-    res.json(movieId);
+    // res.json(movieId);
+    try {
+        const url = `https://api.themoviedb.org/3/movie/${movieId}&language=en-US`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: process.env.TMDB_AUTH_KEY
+            }
+        };
+
+        const responseData = await fetch(url, options)
+        const movieDetails = await responseData.json()
+        res.json(movieDetails)
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch movie details' });
+    }
 })
 
 module.exports = router;
