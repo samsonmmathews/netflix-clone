@@ -48,6 +48,20 @@ router.get('/addMovie/:movieId', async (req, res) => {
 
         const responseData = await fetch(url, options)
         const movieDetails = await responseData.json()
+
+        const watchProviderUrl = `https://api.themoviedb.org/3/movie/${movieId}/watch/providers`;
+        const watchProvidersResponse = await fetch(watchProviderUrl, options)
+        const watchProvidersResult = await watchProvidersResponse.json()
+
+        const watchProviders = Object.keys(watchProvidersResult.results).filter((country) => country === 'CA').map((country) => {
+            const countryData = watchProvidersResult.results[country];
+            return {
+                country,
+                providerName: countryData.flatrate ? countryData.flatrate[0]?.provider_name : countryData.buy[0]?.provider_name
+            }
+        })
+
+        movieDetails.watchProviders = watchProviders
         res.json(movieDetails)
         
     } catch (error) {
